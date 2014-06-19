@@ -1,0 +1,26 @@
+<%- include ../header %>
+<form method='post' action='/machines'>
+
+<label for='datacenter'>datacenter</label>
+<input type="text" id="datacenter" name='machine[datacenter]' value='POC' required/>
+
+<label for='name'>name</label>
+<input type="text" id="name" name='machine[name]' value='' />
+
+<label for='dataset'>dataset</label>
+<input type="text" id="dataset" name='machine[dataset]' value='sdc:sdc:nodejs:1.1.4' required/>
+
+<label for='package'>package</label>
+<input type="text" id="package" name='machine[package]' value='regular_128' required/>
+
+<input id='check' type="submit" value="登录"/>
+
+</form>
+datacenters<br>
+<%=JSON.stringify(datacenters)%><br><br>
+datasets<br>
+<%=JSON.stringify(datasets)%><br><br>
+packages<br>
+<%=JSON.stringify(packages)%>
+
+<%- include ../footer %>

@@ -1,0 +1,17 @@
+{
+  "name":"inCloud",
+  "version":"0.0.1",
+  "private":true,
+  "scripts":{
+	"start":"node app.js"
+  },
+  "dependencies":{
+    "express.io":"",
+    "nodemailer":"",
+    "smartdc":"6.5.0",
+    "ejs":"",
+    "stylus":"",
+	"mongodb":"",
+	"log4js":""
+  }
+}
