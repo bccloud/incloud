@@ -1,5 +1,6 @@
 incloud
 =======
+0.0.1
 部署：
 	nodejs版本：0.9.0,
 	"customPortal": {
