@@ -1,0 +1,25 @@
+<%- include ../header %>
+<form id='form' method='post' action='/login'>
+
+<label for='account'>用&nbsp;户&nbsp名</label>
+<input type="text" id="account" name='account[username]' oninput='reValidity(this)' required/>
+
+<label for='password'>密&nbsp;&nbsp;&nbsp;&nbsp;码 </label>
+<input type="password" id="password" name='account[password]' placeholder='注意密码安全！' oninput='reValidity(this)' required/>
+
+<input id='check' type="submit" value="登录"/>
+
+</form>
+
+<script>
+
+function validity(data,obj){
+	//if(data.txt!=11){
+	//	obj.setCustomValidity("确认")
+	//}　　
+	console.log(1111111111111111111111)
+	console.log(data)
+}
+
+</script>
+<%- include ../footer %>

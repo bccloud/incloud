@@ -1,6 +1,6 @@
 incloud
 =======
-0.0.1
+版本：0.0.1
 部署：
 	nodejs版本：0.9.0,
 	"customPortal": {
@@ -17,3 +17,4 @@ incloud
 		"username": "admin",
 		"password": "tot@ls3crit"
 	},
+2014/6/23

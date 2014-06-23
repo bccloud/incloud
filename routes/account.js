@@ -1,11 +1,11 @@
 var config = require('../config')
 	,capi = new (require('sdc-clients').CAPI)(config.capi)
 	,CloudAPI = require('smartdc').CloudAPI
+
 module.exports = {
 	signupGet :function(req, res){
 		res.render('account/signup')
-	},
-	
+	},	
 	signupPost:function(req, res,next){
 	  if (req.session.account) {
 		delete req.session.account;
@@ -76,7 +76,6 @@ module.exports = {
 			next();
 		});
 	},
-
 
 
 }

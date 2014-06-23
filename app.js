@@ -14,7 +14,8 @@ app.set('view engine', 'ejs')//启用模板引擎ejs,ejs功能相当于JSP
 //<%= code %>：ejs输出
 //<%- code %>：ejs指令
 //<%- function%>:调用res.locals中的方法
-app.use(express.favicon(__dirname+'/public/images/ico.png'));//浏览器标签页小图标
+app.use(express.favicon(__dirname+'/public/images/favicon.ico'));//浏览器标签页小图标
+app.use(require('log4js').connectLogger(logger, {level:'auto'}));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
@@ -31,5 +32,5 @@ app.use(express.static(__dirname+'/public'));//自动获取静态文件目录
 require('./routes')(app);//调用自定义模块（路由映射，处理各种请求），并将app作为参数
 
 app.listen(port,IP,function(){
-	logger.info('server start');
+	logger.info('server start...');
 })//开启服务监听端口，成功后回调输出监听IP和端口

@@ -1,14 +1,12 @@
 module.exports = function(app){
-
 var machine=require('./machine')
 	,util = require('../util')
 	,account = require('./account')
 	,dc = require('./dc')
-	,machine = require('./machine')
-	,logger=require('../util').logger('index')
+	,logger=util.logger('index')
 	
  app.use(util.locals)//app.use([/path], function)为指定path（默认为所有）启用指定function
-	.get('/',function(req, res){res.render('index')})
+	.get('/',function(req, res){res.render('index',{account:req.session.account})})
 	.get('/signup', account.signupGet)
 	.post('/signup'
 		, account.signupPost
@@ -59,10 +57,10 @@ var machine=require('./machine')
 		,machine.startup
 	)　
 	.io.route('account', function(req,res) {
-	req.session.name = req.data
-	req.session.save(function() {
-	req.io.emit('account',{account:req.session.name})
-	req.io.respond(req.session.name)
-	　　})
+		req.session.name = req.data
+		req.session.save(function() {
+			req.io.emit('account',{account:req.session.name})
+			req.io.respond(req.session.name)
+		})
 　　})
 }
