@@ -3,8 +3,9 @@ var util = require('../util')
 	,md5 = require('crypto').createHash('md5')//生成散列值来加密密码
 	,config = require('../config')
 	,CloudAPI = require('smartdc').CloudAPI
+	,machine=require('./machine')
 module.exports = {
-	list : function(req, res, next) {
+	list : function(req, res) {
 		if (!req.session.dc || Date.now() - req.session.dc.time > 60000 * 15) {
 			req.cloud.listDatacenters(function(err, dcList) {
 			  if (err) {
@@ -14,11 +15,11 @@ module.exports = {
 				  list: dcList,
 				  time: Date.now()
 				}
-				next();
+				machine.fetchList(req, res);
 			  }
 			});
 		}else {
-			next();
+			machine.fetchList(req, res);
 		}
 	},
 	getDatasetsAndPackages:function (req, res, next) {

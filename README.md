@@ -17,4 +17,8 @@ incloud
 		"username": "admin",
 		"password": "tot@ls3crit"
 	},
+will:
+根据resize记录，做后付费，预付费
 2014/6/23
+完成环境部署，业务逻辑层处理基本完成
+开始view视图层的开发

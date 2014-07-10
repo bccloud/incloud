@@ -1,0 +1,28 @@
+</section>
+<br>
+<footer style="font-family:arial;align:center">
+Copyright &copy;2014 <%-$('copy_right')%>
+<a href='?lan=en'>English</a>or<a href='?lan=zh'>中文</a>
+</footer>
+</body>
+<script>
+document.querySelectorAll('#<%-locals.id%>').style.textDecoration='underline'
+function checkForm(obj,to){
+	var el=obj.parentNode
+	if(el.checkValidity()){
+		var data={},items=el.querySelectorAll('[name]')
+		for(var i=0;i<items.length;i++)
+			data[items[i].name]=items[i].value		
+		socket.emit(to,data,function(go,flag){
+			if(flag)window.location.href=go
+			else{
+				el.querySelector('[name='+go+']').setCustomValidity('用户名或密码错误')
+				obj.click();
+				el.querySelector('[name='+go+']').setCustomValidity('')
+			}
+		})
+	}
+}
+</script>
+<link rel='stylesheet' href='/stylesheets/style.css'/>
+</html>

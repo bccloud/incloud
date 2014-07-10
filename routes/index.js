@@ -6,19 +6,28 @@ var machine=require('./machine')
 	,logger=util.logger('index')
 	
  app.use(util.locals)//app.use([/path], function)为指定path（默认为所有）启用指定function
-	.get('/',function(req, res){res.render('index',{account:req.session.account})})
-	.get('/signup', account.signupGet)
-	.post('/signup'
-		, account.signupPost
+	.get('/'
 		,account.authed
-		,account.showKeys
-	)
-	.get('/login',account.loginGet)
-	.post('/login'
-		,account.loginPost
-		,dc.list
-		,machine.fetchList
-		,machine.list
+		,function(req, res){
+			res.render('index')
+	})
+	.get('/login'
+		,function(req, res) {
+			res.render('login')
+	})
+	.get('/account'
+		,account.authed
+		,function(req, res){
+			res.render('account',{account:req.session.account})
+	})
+	.get('/logout'
+		,function(req, res){
+			req.session.destroy();
+			res.redirect('/login')
+	})
+	.get('/sshkeys'
+		,account.authed
+		,account.sshkey
 	)
 	.get('/machines/new'
 		,account.authed
@@ -30,11 +39,10 @@ var machine=require('./machine')
 		,dc.getDatasetsAndPackages
 		,machine.create
 	)
-	.get('/resize',function(req, res){
-		if (!req.session.account) {
-			res.redirect('/login');
-		}
-		res.render('machines/resize',{list:req.session.machines})
+	.get('/resize'
+		,account.authed
+		,function(req, res){
+		res.render('resize',{id:'resize',list:req.session.machines})
 	})
 	.post('/resize'
 		,account.authed
@@ -55,12 +63,23 @@ var machine=require('./machine')
 		,account.authed
 		,dc.getDatasetsAndPackages
 		,machine.startup
-	)　
-	.io.route('account', function(req,res) {
-		req.session.name = req.data
-		req.session.save(function() {
-			req.io.emit('account',{account:req.session.name})
-			req.io.respond(req.session.name)
-		})
-　　})
+	)
+	.get('/password'
+		,account.authed
+		,function(req, res){
+			res.render('password',{account:req.session.account})
+		}
+	)
+	.get('/password_reset/:uuid/:code',
+		account.validateForgotPasswordCode
+	)
+	.post('/password_reset/:uuid/:code',
+		account.validateForgotPasswordCode2
+	)
+	app.io.route('account',account.updateIO)
+	app.io.route('login',account.loginIO)
+	app.io.route('signup',account.signupIO)
+	app.io.route('sshkey',account.sshkeyIO)
+	app.io.route('password',account.passwordIO)
+	app.io.route('reset',account.resetIO)
 }

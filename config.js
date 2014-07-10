@@ -21,7 +21,15 @@ module.exports = {
 		"maxAge":1000 * 60 * 60 * 24 * 30,
 		"key":'incloud',
 		"secret":'m7i98o'
+	}, 
+	mail : {
+		host : "smtp.qq.com",
+		port:465,
+		user:'1507632849@qq.com',
+		pass:'miraclet0'
 	},
+	externalUrl : "http://127.0.0.1:3000",
+	passResetMail:__dirname+'/PASSWORD_RESET_EMAIL.html',
 	'machineQueryLimit':200,
 	'logLevel':'warn'
 };

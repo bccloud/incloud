@@ -6,7 +6,9 @@ var util = require('../util')
 	,capi = new (require('sdc-clients').CAPI)(config.capi)
 	,CloudAPI = require('smartdc').CloudAPI
 module.exports = {
-	fetchList:function(req, res,next){
+	fetchList:function(req, res){
+	console.log(req)
+	console.log(res)
 	  var dcNames = Object.keys(req.session.dc.list);
 	  var todo = dcNames.length;//所有datacenters的数量
 	  var done = 0;
@@ -54,9 +56,9 @@ module.exports = {
 			if (errors.length === dcNames.length) {
 			  console.error("ERROR - failed all calls to cloud.listMachines.");
 			
-			  return next();
+			  return list(req, res);
 			}
-			return next();
+			return list(req, res);
 		  }
 		}
 	  }
@@ -76,28 +78,28 @@ module.exports = {
 
 		dc.listMachines(listOpts, allPages(name, dc, listOpts));//获取当前datacenters第一批machines
 	  });
-	},
-	list:function(req, res){
-	  var dcNames = Object.keys(req.session.machines.datacenters);
-	  var machines = dcNames.reduce(function(acc, name) {
-		var arr = req.session.machines.datacenters[name].machines.map(function(m) {
-		  var _m = util.caDeepCopy(m);
-		  _m.datacenter = name;
-		  return _m;
-		});
+		function list(req, res){
+		  var dcNames = Object.keys(req.session.machines.datacenters);
+		  var machines = dcNames.reduce(function(acc, name) {
+			var arr = req.session.machines.datacenters[name].machines.map(function(m) {
+			  var _m = util.caDeepCopy(m);
+			  _m.datacenter = name;
+			  return _m;
+			});
 
-		return acc.concat(arr);
-	  }, []);
-	  var n = 0, len = machines.length;
-	  machines.forEach(function (machine) {
-		req.cloud.listMachineTags(req.session.account, machine.id, function(er, tags) {
-		  machine.tags = tags;
-		  n++;
-		  if (len == n) {
-			res.render('dc/dclist',{machinelist:machines,dclist:req.session.dc})
-		  }
-		})
-	  });
+			return acc.concat(arr);
+		  }, []);
+		  var n = 0, len = machines.length;
+		  machines.forEach(function (machine) {
+			req.cloud.listMachineTags(req.session.account, machine.id, function(er, tags) {
+			  machine.tags = tags;
+			  n++;
+			  if (len == n) {
+				res.render('dc/dclist',{machinelist:machines,dclist:req.session.dc})
+			  }
+			})
+		  });
+		}
 	},
 	create : function(req, res) {
 	  var cloud;

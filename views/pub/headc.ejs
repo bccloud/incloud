@@ -1,0 +1,18 @@
+<div id="header" style="width:100%;">
+	<div class="register">
+	<a href="/account"><%-login()%><%-$(' 你好，进入用户管理')%></a>
+	<a href="/logout"><%-$('退出')%></a>
+	</div>
+	<div style="width:1024px;height:58px;margin-left:auto;margin-right:auto;">	
+		<div style="width:193px;height:58px;float:left;background:url(logo.png);">
+		</div>
+		<nav style='display:inline;'>
+			<a href="/newmachine" id='new'><%-$('购买主机')%></a>
+			<a href="/resize" id='resize'><%-$('配置变更')%></a>
+			<a href="/4d0ece00-3af3-4c33-98ee-916a314e36a6/reboot" onclick='reboot()' id='reboot'><%-$('重启')%></a>
+			<a href="/4d0ece00-3af3-4c33-98ee-916a314e36a6/shutdown" onclick='shutdown()' id='shutdown'><%-$('关机')%></a>
+			<a href="/4d0ece00-3af3-4c33-98ee-916a314e36a6/startup" onclick='startup()' id='startup'><%-$('开机')%></a>
+		</nav>
+	</div>
+</div> 
+<section>

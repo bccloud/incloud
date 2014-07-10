@@ -1,6 +1,34 @@
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  position: relative;
+  width: 1000px;
+  margin: 10px auto;
 }
-a {
-  color: #00b7ff;
+nav {
+  float: left;
+}
+nav a {
+  padding-top: 20px;
+  margin-left: 50px;
+  height: 30px;
+  float: left;
+  font-size: 18px;
+  text-decoration: none;
+  color: #575757;
+}
+nav a:hover {
+  text-decoration: overline;
+  font-weight: bold;
+  color: #005bac;
+}
+.top {
+  padding: 5px 20px;
+  margin-top: 10px;
+  margin-left: 800px;
+}
+img {
+  border: 0;
+}
+.register {
+  text-align: center;
+  padding-left: 250px;
 }
