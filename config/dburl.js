@@ -1,0 +1,1 @@
+module.exports ='://incloud:root@localhost/incloudb'

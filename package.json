@@ -6,11 +6,19 @@
 	"start":"node app.js"
   },
   "dependencies":{
-    "express.io":"",
-    "nodemailer":"",
+    "express":"*",
+    "serve-favicon": "*",
+    "body-parser": "*",
+	"method-override":"*",
+    "cookie-parser": "*",
+    "express-session" : "*",
+	"connect-mongo":"*",
+    "nodemailer":"*",
     "smartdc":"6.5.0",
-    "ejs":"",
-    "stylus":"",
-	"log4js":""
+    "ejs":"*",
+    "stylus":"*",
+	"log4js":"*",
+	"pg":"*",
+	"alipay":"*"
   }
 }

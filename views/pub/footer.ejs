@@ -1,7 +1,7 @@
 </section>
-<br>
-<footer style="font-family:arial;align:center">
-Copyright &copy;2014 <%-$('copy_right')%>
+<br/>
+<footer style="font-family:arial;text-align:center;">
+Copyright &copy;2014 <%-$('北京市计算中心')%>
 <a href='?lan=en'>English</a>or<a href='?lan=zh'>中文</a>
 </footer>
 </body>
@@ -11,18 +11,20 @@ function checkForm(obj,to){
 	var el=obj.parentNode
 	if(el.checkValidity()){
 		var data={},items=el.querySelectorAll('[name]')
-		for(var i=0;i<items.length;i++)
-			data[items[i].name]=items[i].value		
-		socket.emit(to,data,function(go,flag){
-			if(flag)window.location.href=go
-			else{
+		for(var i=0;i<items.length;i++)data[items[i].name]=items[i].value
+		$.post(to,data,function(go,flag){
+			if(go=='password'){
 				el.querySelector('[name='+go+']').setCustomValidity('用户名或密码错误')
 				obj.click();
-				el.querySelector('[name='+go+']').setCustomValidity('')
-			}
+			}else if(flag='success')window.location.href=go
 		})
 	}
 }
+function checkForm1(obj){
+	obj.setCustomValidity('')
+}
 </script>
 <link rel='stylesheet' href='/stylesheets/style.css'/>
+<script src='/javascripts/jquery.js'></script>
+<script src='/javascripts/olark.js'></script>
 </html>

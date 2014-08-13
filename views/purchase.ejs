@@ -1,6 +1,6 @@
 <%- include pub/title %>
-<%- include ../headc %>
-<form method='post' action='/machines'>
+<%- include pub/headc %>
+<form method='post'>
 
 <label for='datacenter'>datacenter</label>
 <input type="text" id="datacenter" name='machine[datacenter]' value='POC' required/>
@@ -14,7 +14,7 @@
 <label for='package'>package</label>
 <input type="text" id="package" name='machine[package]' value='regular_128' required/>
 
-<input id='check' type="submit" value="登录"/>
+<input id='check' type="submit" value="create"/>
 
 </form>
 datacenters<br>
@@ -24,4 +24,4 @@ datasets<br>
 packages<br>
 <%=JSON.stringify(packages)%>
 
-<%- include ../footer %>
+<%- include pub/footer %>

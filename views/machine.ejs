@@ -1,0 +1,14 @@
+<%- include pub/title %>
+<%- include pub/headc %>
+<%=JSON.stringify(machine)%>
+	<form method='post'>
+	<input type="text" id="package" name='package' value='regular_256' required/>
+	<input type='submit' value=<%-$('升级')%>></input>
+	</form>
+	<a href="/<%=machine.dc%>/<%=machine.id%>/reboot" ><%-$('重启')%></a>
+	<a href="/<%=machine.dc%>/<%=machine.id%>/shutdown" ><%-$('关机')%></a>
+	<a href="/<%=machine.dc%>/<%=machine.id%>/startup" ><%-$('开机')%></a>
+	<a href="/<%=machine.dc%>/<%=machine.id%>/del" ><%-$('删除')%></a>
+	<a href="/<%=machine.dc%>/<%=machine.id%>/refresh" ><%-$('更新状态')%></a>
+	<a href="/<%=machine.dc%>/<%=machine.id%>/snapshot" ><%-$('快照')%></a>
+<%- include pub/footer %>

@@ -2,6 +2,13 @@
 <%- include pub/heauc %>
 <%-msg()%>
 <form onsubmit='return false' autocomplete="off">
+用户名：
+<input type="text" id="account" name='login' 
+	placeholder='账号'
+	value="<%= account.login || "" %>"
+	required/>
+<br />
+电邮地址:
 <input type="email" id="email" name="email_address" 
 	pattern='^\w+(\.\w+)*@(\w)+(\.\w+)*.(\w){2,4}$' 
 	placeholder='邮箱' 
@@ -9,29 +16,26 @@
 	value="<%= account.email_address || "" %>" 
 	required/>
 <br />
-<input type="text" id="account" name='login' 
-	placeholder='账号'
-	value="<%= account.login || "" %>"
-	required/>
+<label for="timezone">时区</label>
+<input type="text" value="<%= account.timezone || "" %>" name="timezone">
 <br />
-<input type="text" id="name" name='first_name' 
-	placeholder='姓'
-	value="<%= account.first_name || "" %>" />
-<input type="text" id="name" name='last_name'
-	placeholder='名'
-	value="<%= account.last_name || "" %>" />
+<label for="pref_language">通信语言</label>
+<input type="text" value="<%= account.pref_language || "" %>" name="pref_language">
 <br />
-<input type="text" id="company" name='company_name' 
-	placeholder='公司名称'
-	value="<%= account.company_name || "" %>" />
-<br />
-<input type="tel" id="phone" name='phone_number' 
-	placeholder='手机号'
-	title ='数字'
-	value="<%= account.phone_number || "" %>" />
-<br />
-<label for="company_industry">公司领域</label>
-<input type="text" value="<%= account.company_industry || "" %>" name="company_industry">
+
+<%var field=''
+for(var optional in optionals){
+field+='---------'+optional+'---------<br/>'
+for(var option in optionals[optional]){
+field+=option+' : <input value="'+(account[optionals[optional][option]['name']]||'')+'"'
+for(var opt in optionals[optional][option]){
+	field+=' '+opt+'='+optionals[optional][option][opt]
+}
+field+=' /><br>'
+
+}}%>
+<%-field%>
+
 <br />
 <input type="submit" onclick='checkForm(this,"account")' value="更新设置"/>
 </form>

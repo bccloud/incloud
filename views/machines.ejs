@@ -1,13 +1,11 @@
 <%- include pub/title %>
 <%- include pub/headc %>
-<%-msg()%>
-<h1>赢在云端</h1>
 <% for(var dc in machines){
 	for(var machine in machines[dc]){
 	%>
 <%=JSON.stringify(machines[dc][machine])%>dc:<%=dc%>
+<a href='/<%=dc%>/machine/<%=machines[dc][machine].id%>'>详情</a>
 <br/>---------------------------------------------------------------------------------------<br/>
 <%}}%>
 
-<a href='/purchase'>点击这里购买云主机</a>
 <%- include pub/footer %>

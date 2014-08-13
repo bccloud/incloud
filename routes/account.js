@@ -1,48 +1,19 @@
 var config = require('../config')
 	,capi = new (require('sdc-clients').CAPI)(config.capi)
-	,dc = require('./dc')
 	,util = require('../util')
 	,logger=util.logger('account')
-
+	,db = require('../dao/db')
+	
 module.exports = {
 	authed:function(req,res,next) {
-		if (req.session.account)
+		if (req.session.account){
+			req.cloud = util.cloud(req.session.account.login, req.session.password)
 			return next();
+		}
+		req.session.body=req.body
 		req.session.url=req.url
 		req.session.msg='请登录后继续！'
 		res.redirect('/login');
-	},
-	loginIO:function(req) {
-		var user = req.data.username;
-		var pass = req.data.password;
-		capi.authenticate(user, pass, function (er, account) {
-			if (account) {
-				req.session.account = account;
-				req.session.password = pass;
-				req.session.msg='登录成功！'
-				req.session.save(function(){
-					if(req.session.url){
-						req.io.respond(req.session.url,true)
-						req.session.url=null
-					}else
-						req.io.respond('/account',true)
-				})
-			}else req.io.respond('password')
-		});
-	},
-	signupIO:function(req) {
-	  capi.createAccount(req.data, function(er, account) {
-		if (account) {
-			req.session.account = account;
-			req.session.password = req.data.password;
-			req.session.save(function(){
-				req.io.respond('/sshkeys',true)
-			})
-		}else {
-			console.log(er)
-			req.io.respond('password')
-		}
-	  });
 	},
 	sshkey:function(req, res) {
 	  var cloud = util.cloud(req.session.account.login,req.session.password);
@@ -50,27 +21,127 @@ module.exports = {
 		res.render("sshkeys",{ keys : keys });
 	  });
 	},
-	sshkeyIO:function(req) {
-	  var cloud = util.cloud(req.session.account.login,req.session.password);
-	  cloud.createKey(req.data, function (er, key) {
+	deleteKey:function(req, res) {
+	  req.cloud.deleteKey(req.params.id, function (er, key) {
 		if (er) {
-			console.log("error", er.message);
-		}else{	
-			req.io.respond('/sshkeys',true)
+		  //req.flash("error", er.message);
+		} else {
+		  //req.flash("info", "SSH Key successfully removed.");
+		}
+		res.redirect("/sshkeys");
+	  });
+	},
+	validateForgotPasswordCode:function(req, res,next) {
+	  new (require('sdc-clients').CAPI)(config.capi).getAccount(req.params.uuid, function (er, account) {
+		if (er) return console.log("not found");
+		if (account.forgot_password_code !== req.params.code) {
+		  console.log("error", "Your code has either expired, already " +
+							 "been used, or has been re-issued. " +
+							 "You will need a new code.");
+		} else {
+			next()
 		}
 	  });
 	},
+	password_reset:function(req, res) {
+		  req.body.uuid=req.params.uuid
+		  capi.updateAccount(req.body, function(err, acct) {
+			if (err) {
+				console.log(err)
+			  res.redirect(req.url);
+			} else {
+				req.session.destroy();
+			  res.redirect("/login");
+			}
+		  });
+	},
+	loginIO:function(req,res) {
+	console.log(req.body)
+		var data=req.data||req.body
+		capi.authenticate(data.login, data.password, function (er, account) {
+			if(er) {
+				logger.error(er)
+				res.send('password')
+			}else if (account) {
+				db('users','select',{id:util.cipher(account.uuid)},function(err,doc){
+					if(err)throw err
+					if(doc){
+						delete doc.email_address
+						delete doc.login
+						delete doc.id
+						for(var d in doc){account[d]=util.decipher(doc[d])}
+					}
+					req.session.account = account;
+					req.session.password = data.password
+					req.session.msg='登录成功！'
+					res.send(req.session.url||'/account')
+					req.session.url=null
+				})
+			}
+		})
+	},
+	signupIO:function(req) {
+	  capi.createAccount(req.data, function(er, account) {
+		if (account) {
+			req.session.password = req.data.password;
+			delete req.data.password_confirmation
+			delete req.data.password
+			req.data.id=account.uuid
+			for(var d in req.data){req.data[d]=util.cipher(req.data[d])}
+			db('users','insert',req.data,function(err,doc){
+				if(err)throw err
+				if(doc){
+					delete req.data.email_address
+					delete req.data.login
+					delete req.data.id
+					for(var d in req.data){account[d]=util.decipher(req.data[d])}
+				}
+				req.session.account = account;
+				if(req.session.cookie){
+					req.session.save(function(){
+						req.io.respond('/sshkeys',true)
+					})
+				}else req.io.respond('/sshkeys',true)
+			})
+		}else {
+			console.log(er)
+			req.io.respond('password')
+		}
+	  })
+	},
+	sshkeyIO:function(req,res) {
+	  var cloud = require('../../util').cloud(req.session.account.login,req.session.password);
+	  cloud.createKey(req.data||req.body, function (er, key) {
+		if (er){
+			console.log("error", er.message);
+			app.io.on('connection', function(socket){
+				socket.emit('er',er.message)
+			})
+		}
+		else req.io.respond('/sshkeys',true)
+	  });
+	},
 	updateIO:function(req) {
+		if(!req.session.account)return req.io.respond('/account',true)
 		req.data.uuid=req.session.account.uuid
 		capi.updateAccount(req.data, function (er, account) {
-			if (er) {
-			  req.io.respond('password')
-			}else{
-			  req.session.account = account;
-			  req.session.msg = '个人资料更新成功！';
-			  req.session.save(function(){
-				req.io.respond('/account',true)
-			  })
+			if (er)req.io.respond('password')
+			else{
+				delete req.data.uuid
+				for(var d in req.data){req.data[d]=util.cipher(req.data[d])}
+				db('users','update',{set:req.data,where:{id:util.cipher(req.session.account.uuid)}},function(err,doc){
+					if(err)throw err
+					if(doc){
+						delete req.data.email_address
+						delete req.data.login
+						for(var d in req.data){account[d]=util.decipher(req.data[d])}
+					}
+					req.session.account = account;
+					req.session.msg = '个人资料更新成功！';
+					req.session.save(function(){
+						req.io.respond('/account',true)
+					})
+				})
 			}
 		});
 	},
@@ -81,10 +152,10 @@ module.exports = {
 		}
 		req.data.uuid=req.session.account.uuid
 		capi.updateAccount(req.data, function (er, account) {
-			if (er) {
-			  req.io.respond('password')
-			}else{
+			if (er)req.io.respond('password')
+			else{
 			  req.session.account = account;
+			  req.session.password =req.data.password
 			  req.session.msg = '密码修改成功！';
 			  req.session.save(function(){
 				req.io.respond('/account',true)
@@ -101,9 +172,7 @@ module.exports = {
 	  capi.findCustomer({ email_address: req.data.identifier },true,then)
 	  function then (er, accounts) {
 		if (errState) return;
-		if (er) {
-		  return console.log(errState = er);
-		}
+		if (er)return console.log(errState = er);
 		accounts.forEach(function (a) {
 		  results[a.uuid] = a;
 		});
@@ -141,45 +210,5 @@ module.exports = {
 			break;
 		}
 	  }
-	},
-	validateForgotPasswordCode:function(req, res) {
-	  capi.getAccount(req.params.uuid, function (er, account) {
-	  console.log(account)
-		if (er) return console.log("not found");
-		if (account.forgot_password_code !== req.params.code) {
-		  console.log("error", "Your code has either expired, already " +
-							 "been used, or has been re-issued. " +
-							 "You will need a new code.");
-		} else {
-			res.render("password_reset.ejs")
-		}
-	  });
-	},
-	validateForgotPasswordCode2:function(req, res) {
-	  capi.getAccount(req.params.uuid, function (er, account) {
-		if (er) return console.log("not found");
-		if (account.forgot_password_code !== req.params.code) {
-		  console.log("error", "Your code has either expired, already " +
-							 "been used, or has been re-issued. " +
-							 "You will need a new code.");
-		} else {
-		  if (req.body.password_confirmation !== req.body.password) {
-			return res.redirect(req.url);
-		  }
-		  req.body.uuid=req.params.uuid
-		  //req.body.forgot_password_code=''
-		  capi.updateAccount(req.body, function(err, acct) {
-			if (err) {
-			console.log(err)
-			  res.redirect(req.url);
-			} else {
-			  req.session.account = acct;
-			  req.session.password = req.body.password;
-			  res.redirect("/");
-			}
-		  });
-		}
-	  });
 	}
-
 }
