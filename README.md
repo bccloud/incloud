@@ -22,3 +22,22 @@ will:
 2014/6/23
 完成环境部署，业务逻辑层处理基本完成
 开始view视图层的开发
+2014/8/15
+1、	压力测试
+•对mongo、MySQL、PG进行压力测试比较
+•测试java、nodejs、node cluster性能
+•测试并优化数据库操作处理逻辑
+2、	架构调整
+•Express3升级为express4，利用express4的Router功能优化映射处理逻辑，简化代码提高性能和安全性
+•比较websocket、XMLHttpRequest2、submit数据传输方式，用XMLHttpRequest2代替webSocket进行数据传输，解决cookie共享的问题
+•用mongo代替connect进行session存储，session存储位置由内存改为硬盘，降低内存占用，服务重启session不丢失。
+3、	对数据库数据进行cipher加密存储
+4、	优化数据库更新无记录时的处理逻辑
+5、	解决服务启动之初session为空，无法登录的问题
+6、	解决服务重启后，已经打开的页面偶尔无法与服务端交互的问题
+7、	研究JSE原理，利用JAVASCRIPT函数escape()和unescape()编码实现对JS文件进行加密、解密的功能
+8、	学习mongoDB，pg数据库使用
+9、	完善异常捕获方式，捕获未知异常
+10、	改进log输出，将info信息和err信息分别输出，方便err信息查阅，info信息采用dateFile形式存储
+11、	解决使用IP无法登录问题
+12、	置业网部署
