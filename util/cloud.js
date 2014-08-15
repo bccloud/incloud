@@ -1,5 +1,5 @@
-exports.cloud =function(user, pass, url) {
-	var d = require('./config/cloudapi')
+module.exports=function(user, pass, url) {
+	var d = require('../config/cloud').api
 	d.username = user;
 	d.password = pass;
 	//d.url = url || cloudapi.url;

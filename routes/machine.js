@@ -1,12 +1,7 @@
-var util = require('../util')
-	,debug=util.debug
-	,md5 = require('crypto').createHash('md5')//生成散列值来加密密码
-	,local = require('../local')
-	,config = require('../config')
-	,capi = new (require('sdc-clients').CAPI)(config.capi)
+var cloud = require('../util/cloud')
 module.exports = {
 	dcs : function(req, res,next) {
-		if(!req.cloud)req.cloud = util.cloud(req.session.account.login, req.session.password)
+		//if(!req.cloud)req.cloud = cloud(req.session.account.login, req.session.password)
 		if(!req.session.dc)req.cloud.listDatacenters(function(err, dc) {
 			if (err)return 
 			req.session.dc =dc
@@ -38,18 +33,11 @@ module.exports = {
 					 datasets: req.session.datasets,
 					 packages: req.session.packages });
 	},
-	purchase:function(alipay) {
-		return function(req, res){
-			console.log(alipay)
-		}
-		
-		//alipay.create_direct_pay_by_user(data, res);
-	},
 	create : function(req, res) {
-	  var cloud=(req.body.machine.datacenter== ""?
+	  var dc=(req.body.machine.datacenter== ""?
 			req.cloud:
-			util.cloud(req.session.account.login, req.session.password, req.session.dc[req.body.machine.datacenter]))
-	  cloud.createMachine(req.session.account,req.body.machine,function (er, machine) {
+			cloud(req.session.account.login, req.session.password, req.session.dc[req.body.machine.datacenter]))
+	  dc.createMachine(req.session.account,req.body.machine,function (er, machine) {
 		if (er) {
 		  res.redirect('/purchase');
 		}
@@ -62,7 +50,7 @@ module.exports = {
 			todo = dcNames.length,
 			done = 0;
 		dcNames.forEach(function(name) {
-			var dc =util.cloud(req.session.account.login, req.session.password,req.session.dc[name])
+			var dc =cloud(req.session.account.login, req.session.password,req.session.dc[name])
 			dc.listMachines(function(er,machines,lastPage) {
 				if(lastPage&&!er&&machines)
 					newMachines[name] =machines
@@ -167,6 +155,4 @@ module.exports = {
 		req.cloud.createMachineSnapshot(req.session.account,
 							  req.params.id,{a:'a'},function(){})
 	}
-
-
 }

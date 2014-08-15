@@ -1,24 +1,25 @@
-var config = require('../config')
-	,capi = new (require('sdc-clients').CAPI)(config.capi)
-	,util = require('../util')
-	,logger=util.logger('account')
+var config = require('../config/mail')
+	,capi = new (require('sdc-clients').CAPI)(require('../config/capi'))
+	,crypto = require('../util/crypto')
+	,cloud=require('../util/cloud')
+	,log=require('../util/log')
 	,db = require('../dao/db')
-	
 module.exports = {
-	authed:function(req,res,next) {
+	unth:function(req,res,next){
 		if (req.session.account){
-			req.cloud = util.cloud(req.session.account.login, req.session.password)
-			return next();
+			req.cloud = cloud(req.session.account.login, req.session.password)
+			res.locals.login= function() {return req.session.account.login}
+			res.locals.login=req.session.account.login
+			return next()
 		}
 		req.session.body=req.body
 		req.session.url=req.url
 		req.session.msg='请登录后继续！'
-		res.redirect('/login');
+		return true
 	},
 	sshkey:function(req, res) {
-	  var cloud = util.cloud(req.session.account.login,req.session.password);
-	  cloud.listKeys(req.session.account, function (er, keys) {
-		res.render("sshkeys",{ keys : keys });
+	  req.cloud.listKeys(req.session.account, function (er, keys) {
+		res.render("sshkey",{ keys : keys });
 	  });
 	},
 	deleteKey:function(req, res) {
@@ -28,11 +29,11 @@ module.exports = {
 		} else {
 		  //req.flash("info", "SSH Key successfully removed.");
 		}
-		res.redirect("/sshkeys");
+		res.redirect("/sshkey");
 	  });
 	},
 	validateForgotPasswordCode:function(req, res,next) {
-	  new (require('sdc-clients').CAPI)(config.capi).getAccount(req.params.uuid, function (er, account) {
+	  new (require('sdc-clients').CAPI)(require('../config/capi')).getAccount(req.params.uuid, function (er, account) {
 		if (er) return console.log("not found");
 		if (account.forgot_password_code !== req.params.code) {
 		  console.log("error", "Your code has either expired, already " +
@@ -56,120 +57,111 @@ module.exports = {
 		  });
 	},
 	loginIO:function(req,res) {
-	console.log(req.body)
-		var data=req.data||req.body
-		capi.authenticate(data.login, data.password, function (er, account) {
+		capi.authenticate(req.body.login, req.body.password, function (er, account) {
 			if(er) {
-				logger.error(er)
+				log.error(er)
 				res.send('password')
 			}else if (account) {
-				db('users','select',{id:util.cipher(account.uuid)},function(err,doc){
+				db('users','select',{id:crypto.cipher(account.uuid)},function(err,doc){
 					if(err)throw err
 					if(doc){
 						delete doc.email_address
 						delete doc.login
 						delete doc.id
-						for(var d in doc){account[d]=util.decipher(doc[d])}
+						for(var d in doc){account[d]=crypto.decipher(doc[d])}
 					}
 					req.session.account = account;
-					req.session.password = data.password
+					req.session.password = req.body.password
 					req.session.msg='登录成功！'
 					res.send(req.session.url||'/account')
 					req.session.url=null
 				})
+			}else {
+				console.log(req.body)
+				res.send('password')
 			}
 		})
 	},
-	signupIO:function(req) {
-	  capi.createAccount(req.data, function(er, account) {
-		if (account) {
-			req.session.password = req.data.password;
-			delete req.data.password_confirmation
-			delete req.data.password
-			req.data.id=account.uuid
-			for(var d in req.data){req.data[d]=util.cipher(req.data[d])}
-			db('users','insert',req.data,function(err,doc){
+	signupIO:function(req,res) {
+	  capi.createAccount(req.body, function(er, account) {
+		if(er) {
+			log.error(er)
+			res.send('password')
+		}else if (account) {
+			req.session.password = req.body.password;
+			delete req.body.password_confirmation
+			delete req.body.password
+			req.body.id=account.uuid
+			for(var d in req.body){req.body[d]=crypto.cipher(req.body[d])}
+			db('users','insert',req.body,function(err,doc){
 				if(err)throw err
 				if(doc){
-					delete req.data.email_address
-					delete req.data.login
-					delete req.data.id
-					for(var d in req.data){account[d]=util.decipher(req.data[d])}
+					delete req.body.email_address
+					delete req.body.login
+					delete req.body.id
+					for(var d in req.body){account[d]=crypto.decipher(req.body[d])}
 				}
 				req.session.account = account;
-				if(req.session.cookie){
-					req.session.save(function(){
-						req.io.respond('/sshkeys',true)
-					})
-				}else req.io.respond('/sshkeys',true)
+				res.send('/sshkey')
 			})
 		}else {
-			console.log(er)
-			req.io.respond('password')
+			console.log(req.body)
+			res.send('password')
 		}
 	  })
 	},
 	sshkeyIO:function(req,res) {
-	  var cloud = require('../../util').cloud(req.session.account.login,req.session.password);
-	  cloud.createKey(req.data||req.body, function (er, key) {
+	  req.cloud.createKey(req.body, function (er, key) {
 		if (er){
-			console.log("error", er.message);
-			app.io.on('connection', function(socket){
-				socket.emit('er',er.message)
-			})
-		}
-		else req.io.respond('/sshkeys',true)
+			log.error(er)
+			res.send('password')
+		}else res.send('/sshkey')
 	  });
 	},
-	updateIO:function(req) {
-		if(!req.session.account)return req.io.respond('/account',true)
-		req.data.uuid=req.session.account.uuid
-		capi.updateAccount(req.data, function (er, account) {
-			if (er)req.io.respond('password')
+	updateIO:function(req,res) {
+		req.body.uuid=req.session.account.uuid
+		capi.updateAccount(req.body, function (er, account) {
+			if (er)res.send('password')
 			else{
-				delete req.data.uuid
-				for(var d in req.data){req.data[d]=util.cipher(req.data[d])}
-				db('users','update',{set:req.data,where:{id:util.cipher(req.session.account.uuid)}},function(err,doc){
+				delete req.body.uuid
+				for(var d in req.body){req.body[d]=crypto.cipher(req.body[d])}
+				db('users','update',{set:req.body,where:{id:crypto.cipher(req.session.account.uuid)}},function(err,doc){
 					if(err)throw err
 					if(doc){
-						delete req.data.email_address
-						delete req.data.login
-						for(var d in req.data){account[d]=util.decipher(req.data[d])}
+						delete req.body.email_address
+						delete req.body.login
+						for(var d in req.body){account[d]=crypto.decipher(req.body[d])}
 					}
 					req.session.account = account;
 					req.session.msg = '个人资料更新成功！';
-					req.session.save(function(){
-						req.io.respond('/account',true)
-					})
+					res.send('/account')
 				})
 			}
 		});
 	},
-	passwordIO:function(req) {
+	passwordIO:function(req,res) {
 		var pwd = req.session.password;
-		if (req.data.current_password != pwd) {
-			return req.io.respond('password')
+		if (req.body.current_password != pwd) {
+			return res.send('password')
 		}
-		req.data.uuid=req.session.account.uuid
-		capi.updateAccount(req.data, function (er, account) {
+		req.body.uuid=req.session.account.uuid
+		capi.updateAccount(req.body, function (er, account) {
 			if (er)req.io.respond('password')
 			else{
-			  req.session.account = account;
-			  req.session.password =req.data.password
-			  req.session.msg = '密码修改成功！';
-			  req.session.save(function(){
-				req.io.respond('/account',true)
-			  })
+				req.session.account = account;
+				req.session.password =req.body.password
+				req.session.msg = '密码修改成功！';
+				res.send('/account')
 			}
 		});
 	},
-	resetIO:function (req) {
-	  var identifier = req.data.identifier;
+	resetIO:function (req,res) {
+	  var identifier = req.body.identifier;
 	  var errState = null;
 	  var n = 2;
 	  var results = {};	  
-	  capi.findCustomer({ login: req.data.identifier },true,then);
-	  capi.findCustomer({ email_address: req.data.identifier },true,then)
+	  capi.findCustomer({ login: req.body.identifier },true,then);
+	  capi.findCustomer({ email_address: req.body.identifier },true,then)
 	  function then (er, accounts) {
 		if (errState) return;
 		if (er)return console.log(errState = er);
@@ -184,7 +176,7 @@ module.exports = {
 				var resetLink = config.externalUrl +'/password_reset/' +account.uuid +'/' + account.forgot_password_code;
 				require('fs').readFile(config.passResetMail,'utf8', function (err, data) {
 					if (err) {
-						logger.error(err)
+						log.error(err)
 						data =account.login+"：你好，<a href='${resetLink}'>找回密码</a>:{resetLink}。<br>--incloud"
 					}
 					data = data.replace(/{resetLink}/g, resetLink);
@@ -195,7 +187,7 @@ module.exports = {
 						subject : "Password reset instructions",
 						html : data
 					};
-					util.mail(message)
+					require('../util/mail')(message)
 				});
 			  });
 			break;

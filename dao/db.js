@@ -1,5 +1,5 @@
 module.exports=function(table,opera,data,next){
-	var sql='',util = require('./util')
+	var sql='',util = require('../util/kv')
 	switch(opera){
 	case 'insert':
 		sql=util.KstrV(data)
@@ -12,5 +12,5 @@ module.exports=function(table,opera,data,next){
 		sql='update '+table+' set '+util.KVstr(data.set,',')+' where '+util.KVstr(data.where,' and ')
 		break
 	}
-	require('./pg')('postgres'+require('../config').dburl,sql,next)
+	require('./pg')('postgres'+require('../config/dburl'),sql,next)
 }
