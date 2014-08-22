@@ -8,5 +8,5 @@ else {
 		res.end(ejs.render(str, {
 		  user: require('url').parse(req.url,true).query.user
 		}));
-	}).listen(8081);
+	}).listen(80);
 }
