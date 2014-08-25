@@ -13,5 +13,16 @@ io.on('connection', function(socket){
 			io.sockets.emit('online', users)
 		})	
     }
+	
+	socket.on('chat',function(msg,callback){
+		callback(msg)
+		if(msg.to){
+			if(online[msg.to])online[msg.to].emit('chat',msg,function(data){if(data='OK')callback(msg)});
+			else socket.emit('chat',{message:'我现在不在，稍后回复'});
+		}else {
+			socket.broadcast.emit('chat',msg);
+			callback(msg)
+		}
+	});
 })
 }

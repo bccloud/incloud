@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<HTML>
+<HEAD>
+<TITLE>chat</TITLE>
+<meta charset='utf-8'>
+</HEAD>
+<BODY>
+<ul id='chat'></ul>
+<span id='chatSpan' >
+  <br/>Message：<textarea id='message' name="message" cols="10"></textarea><br />
+  <input type="button" value="Send" onclick="send()"/>
+</span>
+<script src='/socket.io/socket.io.js'></script>
+<script>
+var socket = io.connect('https://localhost')
+var $=function(str){return document.querySelector(str)}
+socket.on('chat',function(data,callback){
+	chat(data,'service');
+	if(callback)callback('OK');
+	else {
+		$('#message').value='';
+		$('#message').focus();
+	}
+});
+function send(){
+	var data = {
+		"message":$('#message').value,
+		"to":'service'
+	};
+	socket.emit('chat',data,function(msg){
+		chat(msg,'me')
+	});
+}
+function chat(data,user){
+	var html="<li>user:"+user+"<br/>message:"+data.message+"</li>";
+	$('#chat').innerHTML=$('#chat').innerHTML+html;
+}
+</script>
+
+</BODY>
+</HTML>

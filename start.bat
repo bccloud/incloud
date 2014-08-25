@@ -1,1 +1,1 @@
-npm install&&node app
+npm install&&forever start -l forever.log -o ../out.log -e ../err.log -a -w app.js

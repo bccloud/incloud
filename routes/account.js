@@ -2,7 +2,6 @@ var config = require('../config/mail')
 	,capi = new (require('sdc-clients').CAPI)(require('../config/capi'))
 	,crypto = require('../util/crypto')
 	,cloud=require('../util/cloud')
-	,log=require('../util/log')
 	,db = require('../dao/db')
 module.exports = {
 	unth:function(req,res,next){
@@ -59,7 +58,7 @@ module.exports = {
 	loginIO:function(req,res) {
 		capi.authenticate(req.body.login, req.body.password, function (er, account) {
 			if(er) {
-				log.error(er)
+				console.error(er)
 				res.send('password')
 			}else if (account) {
 				db('users','select',{id:crypto.cipher(account.uuid)},function(err,doc){
@@ -85,7 +84,7 @@ module.exports = {
 	signupIO:function(req,res) {
 	  capi.createAccount(req.body, function(er, account) {
 		if(er) {
-			log.error(er)
+			console.error(er)
 			res.send('password')
 		}else if (account) {
 			req.session.password = req.body.password;
@@ -113,7 +112,7 @@ module.exports = {
 	sshkeyIO:function(req,res) {
 	  req.cloud.createKey(req.body, function (er, key) {
 		if (er){
-			log.error(er)
+			console.error(er)
 			res.send('password')
 		}else res.send('/sshkey')
 	  });
@@ -176,7 +175,7 @@ module.exports = {
 				var resetLink = config.externalUrl +'/password_reset/' +account.uuid +'/' + account.forgot_password_code;
 				require('fs').readFile(config.passResetMail,'utf8', function (err, data) {
 					if (err) {
-						log.error(err)
+						console.error(err)
 						data =account.login+"：你好，<a href='${resetLink}'>找回密码</a>:{resetLink}。<br>--incloud"
 					}
 					data = data.replace(/{resetLink}/g, resetLink);

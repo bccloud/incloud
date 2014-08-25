@@ -1,3 +1,3 @@
 var log= require('log4js')
-log.configure('config/log.json')
+log.configure({"appenders": [{"type":"console"}]})
 module.exports=log.getLogger('app');

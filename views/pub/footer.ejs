@@ -24,7 +24,8 @@ Copyright &copy;2014 <%-$('北京市计算中心')%>
 	</a><br>
 	<a href="mailto:10086@qq.com">E-mail</a><br>
 	<a href="tel:10086">TEL</a><br>
-	<a href="sms:10086">SMS</a>
+	<a href="sms:10086">SMS</a><br>
+	<a href="/chat">incloudService</a>
 	</div>
 </div>
 <div class="right_bar">
@@ -34,10 +35,8 @@ Copyright &copy;2014 <%-$('北京市计算中心')%>
 </body>
 <link rel='stylesheet' href='/stylesheets/style.css'/>
 <script src='/javascripts/jquery.js'></script>
-<script src='/socket.io/socket.io.js'></script>
 
 <script>
-var socket = io.connect('https://localhost')
 document.querySelectorAll('#<%-locals.id%>').style.textDecoration='underline'
 function checkForm(obj,to){
 	var el=obj.parentNode

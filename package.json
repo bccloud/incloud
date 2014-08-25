@@ -1,25 +1,19 @@
 {
   "name":"inCloud",
   "version":"0.0.1",
-  "private":true,
-  "scripts":{
-	"start":"node app.js"
-  },
   "dependencies":{
     "express":"*",
+    "express-session" : "*",
 	"socket.io":"0.9",
     "serve-favicon": "*",
     "body-parser": "*",
 	"method-override":"*",
     "cookie-parser": "*",
-    "express-session" : "*",
 	"connect-mongo":"*",
     "nodemailer":"*",
-    "smartdc":"6.5.0",
+    "smartdc":"6",
     "ejs":"*",
-    "stylus":"*",
-	"log4js":"*",
-	"cookie":"*",
 	"pg":"*",
+	"log4js":"*"
   }
 }
