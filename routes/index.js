@@ -53,7 +53,7 @@ rout.get('/sshkeys/:id/del',account.deleteKey)
 rout.get('/machines'
 		,machine.dcs
 		,machine.machines
-		,function(req, res){res.render('machines',{machines:req.session.machines})})
+		,function(req, res){res.render('machines',{machines:req.session.machines,page:req.query.p})})
 	.route('/:dc/machine/:id')
 	.get(machine.dcs
 		,machine.datasets

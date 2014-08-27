@@ -7,5 +7,8 @@
 <a href='/<%=dc%>/machine/<%=machines[dc][machine].id%>'>详情</a>
 <br/>---------------------------------------------------------------------------------------<br/>
 <%}}%>
-
+ <a href='/machines/?p=<%-(page-1)%>'>上一页</a>
+ 第<%-page%>页
+ <a href='/machines/?p=<%-(page+1)%>'>下一页</a>
+ <a href='/machines/?p=<%-page%>'>更新状态</a>
 <%- include pub/footer %>

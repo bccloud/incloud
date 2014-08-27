@@ -1,23 +1,23 @@
 {
   "name":"inCloud",
   "version":"0.0.1",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/bccloud/incloud.git"
+  "repository":{
+    "type":"git",
+    "url":"https://github.com/bccloud/incloud.git"
   },
   "dependencies":{
-    "express":"*",
-    "express-session" : "*",
+    "express":"",
 	"socket.io":"0.9",
-    "serve-favicon": "*",
-    "body-parser": "*",
-	"method-override":"*",
-    "cookie-parser": "*",
-	"connect-mongo":"*",
-    "nodemailer":"*",
+    "express-session":"",
+    "serve-favicon":"",
+    "body-parser":"",
+	"method-override":"",
+    "cookie-parser":"",
+	"connect-mongo":"",
+    "nodemailer":"",
     "smartdc":"6",
-    "ejs":"*",
-	"pg":"*",
-	"log4js":"*"
+    "ejs":"",
+	"pg":"",
+	"log4js":""
   }
 }

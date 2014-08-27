@@ -12,8 +12,7 @@ io.on('connection', function(socket){
 			users[account]=0
 			io.sockets.emit('online', users)
 		})	
-    }
-	
+    }	
 	socket.on('chat',function(msg,callback){
 		callback(msg)
 		if(msg.to){
@@ -24,5 +23,4 @@ io.on('connection', function(socket){
 			callback(msg)
 		}
 	});
-})
-}
+})}

@@ -1,1 +1,1 @@
-npm install&&forever start -l /forever.log -o ../out.log -e ../err.log -m 4 -minUptime 1000 –spinSleepTime 1000 -a -w -v -d app.js
+E:&&cd E:\wangjh\APP\incloud&&npm install&&forever start -l /inclog/forever.log -o /inclog/out.log -e /inclog/err.log -a -w app.js
