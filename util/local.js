@@ -1,6 +1,6 @@
 module.exports=function(req, res, next) {
-	if(req.query.lan)
-		req.session.lan=req.query.lan;
+	if(req.query.l)
+		req.session.lan=req.query.l;
 	var local = require('../config/lan')[req.session.lan||'zh']
 	res.locals.$= function(key) {//<%- function%>调用的方法
 		return local[key]||key

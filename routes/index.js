@@ -50,6 +50,7 @@ rout.get('/sshkeys/:id/del',account.deleteKey)
 		,machine.packages
 		,machine.create
 	)
+rout.get('/purchase/:type',machine.buy)
 rout.get('/machines'
 		,machine.dcs
 		,machine.machines

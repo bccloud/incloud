@@ -1,27 +1,63 @@
 <%- include pub/title %>
 <%- include pub/headc %>
-<form method='post'>
+<link href="/stylesheets/all.css" rel="stylesheet"/>
 
-<label for='datacenter'>datacenter</label>
-<input type="text" id="datacenter" name='machine[datacenter]' value='POC' required/>
+<!--购买-->
+<div style="margin-top:35px;width:1050px;">
+<div style="width:700px;border:1px solid pink;float:left;">
+<!--购买开始-->
+<div id="goumai" style="text-align:left;">
+<span style="font-size:22px;font-weight:bold;font-family:'微软雅黑';">
+购买</span><br>
+<span style="font-size:14px;font-weight:bold;font-family:'微软雅黑';">
+如果这里没有您需要的产品套餐，请电邮至<a href="#">business@incloud.org.cn.</a></span>
+</div>
+<!--购买开始-->
+<!--类型开始-->
+<div id="leixing" style="margin-top:20px;">
+<div class="greyTitle">类型</div>
+<div class="leixing">
+<div class="leixing1" onclick="buy('machine')">云主机</div>
+<div class="leixing2" onclick="buy('cunchu')">云存储</div>
+<div class="leixing1" onclick="buy('daibi')">代币</div>
+</div>
+</div>
 
-<label for='name'>name</label>
-<input type="text" id="name" name='machine[name]' value='' />
+<div id="type" style="margin-top:80px;text-align:left;">
+</div>
+</div>
 
-<label for='dataset'>dataset</label>
-<input type="text" id="dataset" name='machine[dataset]' value='sdc:sdc:nodejs:1.1.4' required/>
-
-<label for='package'>package</label>
-<input type="text" id="package" name='machine[package]' value='regular_128' required/>
-
-<input id='check' type="submit" value="create"/>
-
-</form>
-datacenters<br>
-<%=JSON.stringify(datacenters)%><br><br>
-datasets<br>
-<%=JSON.stringify(datasets)%><br><br>
-packages<br>
-<%=JSON.stringify(packages)%>
-
+<!--右侧开始-->
+<div style="width:260px;border:1px solid #858585;float:left;margin-left:20px;">
+<div style="width:100%;height:132px;border:1px solid #858585;font-size:14px;font-family:'微软雅黑'">
+<div style="width:100%;height:20px;background:#F1F1F1;font-weight:bold;">您的购物车</div>
+<div style="font-weight:bold;margin-left:10px;text-align:left;width:100%;height:110px;">
+总数：<br>
+<span style="font-size:18px;">RMB：9.00</span><br>
+<input type="submit" value="结账" style="color:white;margin-left:100px;margin-top:15px;width:56px;height:31px;background-color:#0983c9;"></input>
+</div>
+<div style="border:1px solid #858585;height:105px;">
+<div>
+<div style="float:left;">
+<img style="height:60px;width:29px;margin-left:15px;margin-top:8px;">
+</div>
+<div style="text-align:left;margin-left:60px;">Storage Samba 3.6</div>
+<div style="text-align:left;margin-left:60px;">10GB 存储空间</div>
+<div style="text-align:left;margin-left:60px;">数据中心：BJ1 </div>
+<div style="text-align:left;margin-left:60px;">1个月</div>
+<div style="text-align:right;"><a href="clearGwc.html">清空购物车</a></div>
+</div>
+</div>
+</div>
+</div>
+<!--右侧结束-->
+</div>
+<script>
+function buy(type){
+$.get('/purchase/'+type,function(html){
+	$('#type').html(html)
+})
+}
+window.onload=buy('machine')
+</script>
 <%- include pub/footer %>

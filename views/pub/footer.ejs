@@ -1,9 +1,15 @@
-</section>
-<br/>
-<footer style="font-family:arial;text-align:center;">
-Copyright &copy;2014 <%-$('北京市计算中心')%>
-<a href='?lan=en'>English</a>or<a href='?lan=zh'>中文</a>
-</footer>
+
+<div id="footer" 
+style="font-size:13px;color:#858585;font-family:'微软雅黑';">
+<HR  width=1050 color=#2f5167 SIZE=3 noShade>
+<br>
+关于我们 | 赢云主机 | 价格政策 | 帮助中心 | 联系我们 | 北京市计算中心
+<a href='?l=en'>English</a>or<a href='?l=zh'>中文</a>
+<br>
+京ICP备13020209号-2京公网安备11010802009464号
+</div>
+</div>
+</center>
 
 <div id="kefu">
 	<div class="top">
@@ -39,7 +45,7 @@ Copyright &copy;2014 <%-$('北京市计算中心')%>
 <script>
 document.querySelectorAll('#<%-locals.id%>').style.textDecoration='underline'
 function checkForm(obj,to){
-	var el=obj.parentNode
+	var el=obj.parentNode.parentNode
 	if(el.checkValidity()){
 		var data={},items=el.querySelectorAll('[name]')
 		for(var i=0;i<items.length;i++)data[items[i].name]=items[i].value

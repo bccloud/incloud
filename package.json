@@ -8,16 +8,17 @@
   "dependencies":{
     "express":"",
 	"socket.io":"0.9",
-    "express-session":"",
+    "ejs":"",
+	"log4js":"",
+	"pg":"",
+	"mongodb":"",
     "serve-favicon":"",
     "body-parser":"",
 	"method-override":"",
     "cookie-parser":"",
+    "express-session":"",
 	"connect-mongo":"",
     "nodemailer":"",
-    "smartdc":"6",
-    "ejs":"",
-	"pg":"",
-	"log4js":""
+    "smartdc":"6"
   }
 }

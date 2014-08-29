@@ -10,7 +10,9 @@ exports.find=function(con,collection,data,next){
 		collection.find(data).toArray(function(err, docs) {
 			db.close()
 			if (err) throw err
-			else next(docs[0])
+			else {
+				next(docs[0])
+			}
 		})
 	})
 }
@@ -18,19 +20,11 @@ exports.update=function(con,collection,data,next){
 	getCollection(con, function(db) {
 		collection = db.collection(collection);
 		collection.update(data.where,{$set:data.set},function(err, docs) {
-			db.close()
+			db.close();
 			if (err) throw err
-			else next(docs)
-		})
-	})
-}
-exports.insert=function(con,collection,data,next){
-	getCollection(con, function(db) {
-		collection = db.collection(collection);
-		collection.insert(data, function(err, docs) {
-			db.close()
-			if (err) throw err
-			else next(docs[0])
+			else{
+				next(docs)
+			}
 		})
 	})
 }

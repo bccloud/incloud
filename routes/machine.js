@@ -140,5 +140,11 @@ module.exports = {
 		res.redirect('/machines');
 	  })},
 	refresh:function(req, res, next){res.redirect('/'+req.params.dc+'/machine/'+req.params.id)},
-	snapshot:function(req, res, next){req.cloud.createMachineSnapshot(req.session.account,req.params.id,{a:'a'},function(){})}
+	snapshot:function(req, res, next){req.cloud.createMachineSnapshot(req.session.account,req.params.id,{a:'a'},function(){})},
+	buy:function(req, res, next){
+		if(req.params.type='machine')
+			res.render('buymachine',{ datacenters: Object.keys(req.session.dc),
+					 datasets: req.session.datasets,
+					 packages: req.session.packages })
+	}
 }
