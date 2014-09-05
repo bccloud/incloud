@@ -19,6 +19,7 @@
     "express-session":"",
 	"connect-mongo":"",
     "nodemailer":"",
-    "smartdc":"6"
+    "smartdc":"6",
+	"redis":""
   }
 }

@@ -1,4 +1,5 @@
-var sessionStore=new(require('connect-mongo')(require('express-session')))({url:'mongodb'+require('./config').session.dburl}),
+global.locals=require('./config/lan')
+var sessionStore=new(require('connect-mongo')(require('express-session')))({url:'mongodb'+require('./config/dburl')}),
 	secret=require('./config').session.secret,
 	app = require('express')()//require-引入功能模块(即框架：jquery、Spring)
 	.set('env',require('./config').server.env)//设置当前环境为生产环境，避免在浏览器输出异常，默认为development

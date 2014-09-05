@@ -6,7 +6,6 @@ module.exports ={
 	},
 	session:{
 		maxAge:1000 * 60 * 60 * 24 * 30,
-		secret:'qX85yj_dV_neNAUuIPoRDlCxa4MrLgD_',
-		dburl:'://incloud:root@localhost/incloudb'
+		secret:'qX85yj_dV_neNAUuIPoRDlCxa4MrLgD_'
 	}
 }

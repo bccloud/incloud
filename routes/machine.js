@@ -1,6 +1,7 @@
 var cloud=require('../util/cloud')
-,limit=require('../config/limit')
-,date=require('../util/date')
+	,limit=require('../config/limit')
+	,date=require('../util/date')
+	,db = require('../dao/mongo')
 module.exports = {
 	dcs:function(req, res,next){
 		if(!req.session.dc)req.cloud.listDatacenters(function(err, dc) {
@@ -125,9 +126,9 @@ module.exports = {
 	  });
 	},
 	del:function(req, res, next){
-	req.cloud.deleteMachine(req.session.account,
-	req.params.id,
-	function (er) {
+		req.cloud.deleteMachine(req.session.account,
+		req.params.id,
+		function (er) {
 		if (er) {
 		  switch (er.httpCode){
 			case 409:
@@ -136,15 +137,25 @@ module.exports = {
 			  er = null;
 		  }
 		}
-		if (er) return //next(er);
+		if (er) throw er//return //next(er);
 		res.redirect('/machines');
-	  })},
+	})},
 	refresh:function(req, res, next){res.redirect('/'+req.params.dc+'/machine/'+req.params.id)},
 	snapshot:function(req, res, next){req.cloud.createMachineSnapshot(req.session.account,req.params.id,{a:'a'},function(){})},
-	buy:function(req, res, next){
-		if(req.params.type='machine')
-			res.render('buymachine',{ datacenters: Object.keys(req.session.dc),
+	type:function(req, res, next){
+			res.render('buy/'+req.params.type,{ datacenters: Object.keys(req.session.dc),
 					 datasets: req.session.datasets,
 					 packages: req.session.packages })
+	},
+	goshop:function(req, res, next){
+		req.body['产品']=req.params.type
+		req.body['id']=new Date().getTime()
+		db.upsert('goshop',{where:{user:req.session.account.login},push:{goshop:req.body}},function(err,doc){
+			if(err)res.send('err')
+			else if(doc){
+				req.session.goshop.push(req.body)
+				res.send(req.session.goshop)
+			}else res.send('无记录')
+		})
 	}
 }

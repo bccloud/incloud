@@ -1,0 +1,75 @@
+<!--提示开始-->
+<div id="tishi" style="margin-top:80px;text-align:left;">
+<div class="greyTitle"style="text-align:left;">提示</div>
+<div style="font-size:14px;font-weight:bold;font-family:'微软雅黑';">
+<span style="color:red;">云存储只能挂载于同一数据中心的云主机。</span><br>
+数据中心信息可到‘我的云主机’，进入主机详细信息页面查询。
+</div>
+</div>
+<!--提示结束-->
+<div id="yuncunchu" style="margin-top:20px;">
+<div class="greyTitle">云存储容量</div>
+<div class="leixing">
+<div class="leixing3">数据中心</div>
+<div class="sjzx2" onclick="good1(this)">BJ1</div>
+<div class="sjzx1" onclick="good1(this)">BJ2</div>
+</div>
+<div class="leixing" style="margin-top:80px;"><!--186-->
+<div class="leixing3">期限</div>
+<div class="qx2" onclick="good(this)"><span id='qx'>1</span>个月(30日)<br>RMB<span id='rmb'>0.75</span>/月</div>
+<div class="qx1" onclick="good(this)"><span id='qx'>3</span>个月(30日)<br>RMB<span id='rmb'>0.72</span>/月</div>
+<div class="qx1" onclick="good(this)"><span id='qx'>6</span>个月(30日)<br>RMB<span id='rmb'>0.67</span>/月</div>
+<div class="qx1" onclick="good(this)"><span id='qx'>12</span>个月(30日)<br>RMB<span id='rmb'>0.60</span>/月</div>
+</div>
+<div style="text-align:left;">
+<input type='range' id='range' min='10' max='1024' value='10' style='width:500px;height:45px' onchange='show(this.value)'/>1024GB
+</div>
+<div style="text-align:left;height:45px"><span id='size'>购买容量</span>：<input type="text" value="10" id='rongliang' name="rongliang" onchange='show2(this.value)'/>GB</div>
+<div>
+<div style="float:left;width:450px;height:45px;">
+RMB <span id='r1'>0.90</span>/月 × 
+<span id='r2'>1</span>个月 × 
+<span id='age'>10</span>GB = RMB 
+<span id='r3'>9.00</span>
+ <hr style="1px solid #c1c1c1" width="94%">
+ </div>
+<div style="float:left;"><input type="button" value="添加到购物车" onclick='goshop()'
+style="font-weight:bold;color:white;width:112px;height:31px;background-color:#6aa74e;"/>
+ </div>
+ </div>
+
+</div>
+<script>
+var goods={期限:'1',购买容量:'10',数据中心:'BJ1'}
+	console.log(goods)
+function good1(el){
+	goods[el.parentNode.querySelector('.leixing3').textContent]=el.textContent
+	console.log(goods)
+}
+function good(el){
+	goods[el.parentNode.querySelector('.leixing3').textContent]=el.querySelector('#qx').textContent
+	document.querySelector('#r1').textContent=el.querySelector('#rmb').textContent
+	document.querySelector('#r2').textContent=el.querySelector('#qx').textContent
+	document.querySelector('#r3').textContent=(el.querySelector('#rmb').textContent*el.querySelector('#qx').textContent*document.querySelector('#age').textContent).toFixed(2)
+	console.log(goods)
+}
+function show(value){
+	document.querySelector('#rongliang').value=value
+	document.querySelector('#age').textContent=value
+	goods[document.querySelector('#size').textContent]=value
+	document.querySelector('#r3').textContent=(value*document.querySelector('#r1').textContent*document.querySelector('#r2').textContent).toFixed(2)
+	console.log(goods)
+}
+function show2(value){
+	document.querySelector('#range').value=value
+	document.querySelector('#age').textContent=value
+	goods[document.querySelector('#size').textContent]=value
+	document.querySelector('#r3').textContent=(value*document.querySelector('#r1').textContent*document.querySelector('#r2').textContent).toFixed(2)
+	console.log(goods)
+}
+function goshop(){
+	$.post('/purchase/machine',goods,function(cost){
+		alert(cost)
+	})
+}
+</script>
