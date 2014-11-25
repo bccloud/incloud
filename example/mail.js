@@ -6,7 +6,7 @@ var transporter = nodemailer.createTransport({host: 'smtp.126.com', // 主机
 		port: '25', // SMTP 端口
 		auth: {
 			user: 'canfeit@126.com',
-			pass: 'miraclet0'
+			pass: '*********************'
 		}
 });
 

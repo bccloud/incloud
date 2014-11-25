@@ -1,7 +1,7 @@
 var AWS = require('aws-sdk');
 AWS.config={
     accessKeyId: "F-A-GL21Y4UIQLUYGEFY",
-    secretAccessKey: "2r080-F0YHoGji0TCmfMxXISUMFAYYSaoZc7nQ==",
+    secretAccessKey: "***********==",
 	httpOptions:{proxy:'http://cs1-bj.incloud.org.cn:80'}
 }
 var s3 = new AWS.S3();

@@ -3,7 +3,7 @@
 		"host":"smtp.126.com",
 		"port":25,
 		"user":"canfeit@126.com",
-		"pass":"miraclet0"
+		"pass":"*********"
 	},
 	"externalUrl":"https://localhost:80",
 	"passResetMail":"./public/PASSWORD_RESET_EMAIL.html"
