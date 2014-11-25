@@ -2,7 +2,7 @@ var https = require('https');
 var querystring = require('querystring'); 
 var post_data = querystring.stringify({
      'login' : 'admin',
-     'password' : '5gzj?D70',
+     'password' : '*************',
      }),
  post_option = {
   host: '192.168.77.108',
