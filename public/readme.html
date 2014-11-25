@@ -1,0 +1,13 @@
+项目名称：incloud Portal演示版<br><br>
+主要开发周期：2014年6月——2014年9月<br><br>
+需求成果：实现云主机与用户管理，熟悉Joyent技术工作原理，探索、测试相关技术和功能<br><br>
+项目状态：核心功能开发已完成,部分细节未完善，部分概念性功能未开发<br><br>
+开发语言：nodejs<br><br>
+技术功能（视版本而定）：express（基础架构）、ejs（模板引擎）、log4js（日志管理）、pg（数据库）、mongodb+redis（购物车、数据缓存）、nodemailer（邮件验证）、<br> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+		smartdc（基础服务）、socket.io（即时更新）、ccap（图形验证码）、aws-sdk（对象存储）、cluster（多线程）、weimi（短信验证）<br><br>
+开发体会：1、避免过早优化；2、避免重复造轮但要使用合适的技术，必要时自己实现想要的功能，避免使用非必需的技术；3、使用成熟的技术；4、借鉴成熟的案例；5、不要轻易做技术升级<br><br>
+存在问题：1、sdc6.5用户key可以重名导致混乱，已在sdc7中修复<br>
+2、socket.io与express session共享管理存在问题，为此进行过几次架构调整，现有解决方案并不完善<br>
+3、ccap图像验证码存在偶尔匹配失败的问题，目前无其他成熟方案。web服务？<br>
+4、6.5中同时创建多台主机失败，已在sdc7中修复<br><br>
+github托管地址：https://github.com/bccloud/incloud

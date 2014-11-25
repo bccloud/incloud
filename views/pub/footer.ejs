@@ -1,59 +1,51 @@
 
 <div id="footer" 
 style="font-size:13px;color:#858585;font-family:'微软雅黑';">
-<HR  width=1050 color=#2f5167 SIZE=3 noShade>
+<HR  width=80% color=#2f5167 SIZE=3 noShade>
 <br>
-关于我们 | 赢云主机 | 价格政策 | 帮助中心 | 联系我们 | 北京市计算中心
+【<%=v.os%>版，适配：<%=v.browser%>】
 <a href='?l=en'>English</a>or<a href='?l=zh'>中文</a>
+<a href="/docs">DOCS</a>
 <br>
-京ICP备13020209号-2京公网安备11010802009464号
 </div>
 </div>
 </center>
-
-<div id="kefu">
-	<div class="top">
-		在线客服<img src="http://demo.lanrenzhijia.com/images/close.gif" class="close" />
-	</div>
-	<div class="middle">	
-	<a href="http://wpa.qq.com/msgrd?v=3&uin=1507632849&site=qq&menu=yes">
-		<img src="http://wpa.qq.com/pa?p=2:1507632849:52"/>
-	</a><br>
-	<a href="tencent://message/?uin=1507632849&Site=incloud&Menu=yes">
-		<img src="http://wpa.qq.com/pa?p=2:1507632849:52"/>
-	</a><br>
-	<a href="aliim:sendmsg?uid=cntaobao&touid=cntaobaomiracle米诺克&siteid=cntaobao&status=1">
-		<img src="http://amos.alicdn.com/online.aw?v=2&uid=miracle米诺克&site=cntaobao&s=2&charset=utf-8"/>
-	</a><br>
-	<a href="skype:yangmp2012?chat">
-		<img src="http://mystatus.skype.com/mediumicon/yangmp2012"/>
-	</a><br>
-	<a href="mailto:10086@qq.com">E-mail</a><br>
-	<a href="tel:10086">TEL</a><br>
-	<a href="sms:10086">SMS</a><br>
-	<a href="/chat">incloudService</a>
-	</div>
-</div>
-<div class="right_bar">
-	<img src="http://demo.lanrenzhijia.com/images/right_bar.jpg" />
-</div>
-	
 </body>
+
 <link rel='stylesheet' href='/stylesheets/style.css'/>
-<script src='/javascripts/jquery.js'></script>
 
 <script>
-document.querySelectorAll('#<%-locals.id%>').style.textDecoration='underline'
 function checkForm(obj,to){
 	var el=obj.parentNode.parentNode
 	if(el.checkValidity()){
 		var data={},items=el.querySelectorAll('[name]')
 		for(var i=0;i<items.length;i++)data[items[i].name]=items[i].value
-		$.post(to,data,function(go,flag){
+		$.post(to,data,function(go){
 			if(go=='password'){
 				el.querySelector('[name='+go+']').setCustomValidity('用户名或密码错误')
 				obj.click();
-			}else if(flag='success')window.location.href=go
+			}
+			else if(/^\/.*$/.exec(go)){
+			window.location.href=go
+			}
+			else alert(go)
+		})
+	}
+}
+function checkForm2(obj,to){
+	var el=obj.parentNode
+	if(el.checkValidity()){
+		var data={},items=el.querySelectorAll('[name]')
+		for(var i=0;i<items.length;i++)data[items[i].name]=items[i].value
+		$.post(to,data,function(go){
+			if(go=='password'){
+				el.querySelector('[name='+go+']').setCustomValidity('用户名或密码错误')
+				obj.click();
+			}
+			else if(/^\/.*$/.exec(go)){
+				window.location.href=go
+			}
+			else alert(go)
 		})
 	}
 }
@@ -62,30 +54,7 @@ function checkForm1(obj){
 }
 </script>
 
-<script src=http://float2006.tq.cn/floatcard?adminid=9631004&sort=0 ></script>
-<script src="http://mechatim.com/js/unit/button.js?id=2960" ></script>	
-<script src='/javascripts/olark.js'></script>
-
-<style>
-#kefu{ width:120px; height:auto; position:fixed; top:50%; right:5px;z-index:8888; background:#fff; border:1px solid #d1d1d1;border-top:2px solid #ca2d25; display:none; margin-top:-240px;}
-#kefu .top{ width:100%; height:35px; line-height:35px;font-family:"Microsoft YaHei"; font-size:14px; color:#333; font-weight:bold; text-align:center;}
-#kefu .middle{ font-size:12px; width:100%; text-align:center;}
-#kefu .middle p{ color:#991C0A;}
-#kefu .close{float:right; margin-right:10px; margin-top:10px; cursor:pointer;}
-.right_bar{ width:28px; height:95px; position:fixed; top:50%; right:0; margin-top:-242px; z-index:9999;}
-.right_bar img{cursor:pointer;}
-</style>
-<script>
-$(function(){
-	$('.right_bar').click(function(){
-		$(this).hide();
-		$('#kefu').show();
-	});
-	$('#kefu .close').click(function(){
-		$('.right_bar').show();
-		$('#kefu').hide();
-	});
-});
-</script>
-
+<script src='/javascripts/jquery.js'></script>
+<script src=http://float2006.tq.cn/floatcard?adminid=9631004&sort=0></script>
+<script src=https://s.meiqia.com/js/mechat.js?unitid=2960></script>
 </html>

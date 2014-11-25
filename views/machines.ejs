@@ -3,9 +3,14 @@
 <% for(var dc in machines){
 	for(var machine in machines[dc]){
 	%>
-<%=JSON.stringify(machines[dc][machine])%>dc:<%=dc%>
+名称:<%=machines[dc][machine].name%>;
+类型:<%=machines[dc][machine].type%>;
+状态:<%=machines[dc][machine].state%>;
+内存:<%=machines[dc][machine].memory%>;
+创建日期:<%=machines[dc][machine].created%>（北京时间）;
+数据中心:<%=dc%>
 <a href='/<%=dc%>/machine/<%=machines[dc][machine].id%>'>详情</a>
-<br/>---------------------------------------------------------------------------------------<br/>
+<br/>-------------------------------------------------------------------------------------------------------------------------<br/>
 <%}}%>
  <a href='/machines/?p=<%-(page-1)%>'>上一页</a>
  第<%-page%>页

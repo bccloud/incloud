@@ -1,6 +1,7 @@
 module.exports=function(io){
 var online={},users={}
 io.on('connection', function(socket){
+console.log('socket connection')
 	var account=''
 	if(socket.handshake&&socket.handshake.session&&(account=socket.handshake.session.account)){
 		account=account.login

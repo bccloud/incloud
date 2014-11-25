@@ -1,0 +1,79 @@
+<%- include pub/title %>
+<%- msg%>
+</div>
+</div>
+<style type="text/css">
+	.mainInput{
+	margin-top:8px;
+	}
+</style>
+<div style="margin-top:35px;height:430px;width:90%;">
+<div style="float:left;width:90%;height:380px;">
+<!--登录信息-->
+<div id="login" style="height:120px;width:90%;background-color:#F1F1F1;">
+<form method='post' onsubmit='return false' id='login'>
+<input type="text"  name="login"
+		placeholder='账号'
+		title ='账号'
+		required class="mainInput" oninput='checkForm1(this)'>
+<input type="password" name="password" placeholder='注意密码安全！'  title ='密码' oninput='checkForm1(this)'
+		required class="mainInput">
+		<br>
+<input type="submit" onclick='checkForm(this,"login")' value="登录" style="background-color:#0983c9;">
+<input type="submit" onclick='checkForm(this,"reset")' value="找回密码"	style='background-color:#0983c9;'/>
+</form>
+<form onsubmit='return false'>
+	<input type="text" name="identifier"
+		placeholder='用户名或邮箱'
+		title ='用户名或邮箱'
+		required
+		style='margin:5px'/>
+</form>
+</div>
+<!--注册信息-->
+<div id="register"style="margin-top:18px;height:250px;width:90%;background-color:#F1F1F1;">
+<div><span style="float:left;padding-top:10px;padding-left:18px;">没有账户？</span></div>
+<form onsubmit='return false'>
+<input type="email" id="email" name="email_address" 
+	pattern='^\w+(\.\w+)*@(\w)+(\.\w+)*.(\w){2,4}$' 
+	placeholder='邮箱' 
+	title ='字母数字下划线开头'
+	required class="mainInput"></input>
+<input type="text" id="account" name='login' 
+	placeholder='账号'
+	required class="mainInput"></input>
+<input type="password" id="password" name='password' 
+	placeholder='密码'
+	required class="mainInput"></input>
+<input type="password" id="passwordConfirm" name='password_confirmation' 
+	placeholder='确认密码'
+	required class="mainInput"></input>
+<input type="text" name='promotion_code' 
+	placeholder='(可选项)推广码' class="mainInput"></input>
+<div  class="mainInput">
+<input type="checkbox" id='agreement' title ='您必须同意此协议' required style="text-align:left;margin-top:10px;">
+<label for='agreement'>我接受</label><a href='#' onclick='locking()'>服务条款</a></input>
+<input type="submit" onclick='checkForm(this,"signup")'  value="注册" 
+style="float:right;width:56px;height:31px;background-color:#6aa74e;margin-right:30px;"></input></div>
+</form>
+</div>
+</div>
+</DIV>
+
+
+<div id="lay"style="FILTER: alpha(opacity=0);opacity:.5;background-color: #777;z-index: 10;display: none;position:fixed;left: 0px; top: 0px; width:90%; height:90%;"></div>
+<div id="box"style="background-color: #fff;z-index: 11;display: none;position:fixed;left:25%;top:25%;width:90%;height:500px;text-align:center">
+	<iframe width=99.5% height=89% src='<%-$("agreement.html")%>'></iframe><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button style='width:10%;height:8%;' onclick='unLock()'>关闭</button>
+</div>
+<script>
+function locking(){
+	document.all.lay.style.display="block";
+	document.all.box.style.display='block';
+}
+function unLock(){
+  document.all.lay.style.display='none';
+  document.all.box.style.display='none';
+}
+</script>
+<%- include pub/footer %>

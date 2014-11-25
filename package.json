@@ -7,11 +7,11 @@
   },
   "dependencies":{
     "express":"",
-	"socket.io":"0.9",
     "ejs":"",
 	"log4js":"",
-	"pg":"",
 	"mongodb":"",
+	"pg":"",
+	"redis":"",
     "serve-favicon":"",
     "body-parser":"",
 	"method-override":"",
@@ -19,7 +19,7 @@
     "express-session":"",
 	"connect-mongo":"",
     "nodemailer":"",
-    "smartdc":"6",
-	"redis":""
+	"nodemailer-smtp-transport":"",
+    "smartdc":"6"
   }
 }

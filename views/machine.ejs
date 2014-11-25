@@ -1,5 +1,6 @@
 <%- include pub/title %>
 <%- include pub/headc %>
+<%delete machine.metadata%>
 <%=JSON.stringify(machine)%>
 	<form method='post'>
 	<input type="text" id="package" name='package' value='regular_256' required/>

@@ -6,7 +6,7 @@
 		placeholder='公钥名称' ><br/>
       <textarea name="key" class="sshkey" 
 		placeholder='SSH公钥' required></textarea><br/>
-      <input type="submit" onclick='checkForm(this,"sshkey")'/>
+      <input type="submit" onclick='checkForm2(this,"sshkey")'/>
 
 </form>
   <ul>
@@ -16,7 +16,7 @@
           <dt><%- $('名称') %></dt>
           <dd><%- keys[i].name || ""%></dd>
           <dt><%- $('SSH公钥') %></dt>
-          <dd><%- keys[i].key %></dd>
+          <dd><div style='width:100px'><%- keys[i].key %></div></dd>
         </dl>
           <a href="/sshkeys/<%= keys[i].name %>/del" ><%- $('删除') %></a>
     </li>

@@ -1,0 +1,48 @@
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title></title>
+	<script type="text/javascript" src="captcha/jquery-1.6.2.min.js"></script>
+	<script type="text/javascript" src="captcha/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="captcha/jquery.captcha.js"></script>
+	<link href="captcha/captcha.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" charset="utf-8">
+		$(function() {
+			$(".ajax-fc-container").captcha({
+				url:"/captcha",
+				formId:"captcha",
+				text:"拖动<span>scissors</span> 到右侧圆圈内.",
+				lang:Array("铅笔","剪刀","时钟","红心","音符")
+			});
+		});
+	</script>
+</head>
+<body>
+<h3>
+<pre>
+ccap验证码约束：
+1、与操作系统有关
+2、与开发环境版本有关
+3、与浏览器有关，在火狐中存在二次请求现象
+
+</pre>
+</h3>
+<!-- Begin of captcha -->	
+<div class="ajax-fc-container"></div>
+<!-- End of captcha -->
+
+
+<!-- Just an example of your form -->	
+<form action="/captcha" method="post" id="captcha">
+	<input type="submit" name="submit" value="验证">
+</form>
+<!-- End of form example -->
+<h3>
+<pre>
+captcha验证码：
+1、基于浏览器生成验证码，无平台限制
+2、图片拖拽式验证码比较小众
+</pre>
+</h3>
+</body>	
+</html>

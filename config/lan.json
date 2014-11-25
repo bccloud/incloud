@@ -7,6 +7,15 @@
 	  "登录成功！":"Login Success!",
 	  "个人资料更新成功！":"Update Success!",
 	  "邮箱":"email",
+	  "Incloud演示":"inCloud Demo",
+	  "关于本系统":"about",
+	  "inCloud云":"inCloud",
+	  "忘记密码":"help",
+	  "找回密码":"find",
+	  "没有账户":"No account",
+	  "注意密码安全":"careful",
+	  "账号":"account",
+	  "登录":"login",
 	  "agreement.html":"agreement - en.html"
 	},
 	"zh":{}

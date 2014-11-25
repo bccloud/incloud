@@ -1,12 +1,12 @@
 <%- include pub/title %>
 <%- include pub/heauc %>
 <%-msg%>
-<form onsubmit='return false' autocomplete="off">
+<form onsubmit='return false' autocomplete="off" style='text-align:left;margin-left:380px;'>
 用户名：
 <input type="text" id="account" name='login' 
 	placeholder='账号'
 	value="<%= account.login || "" %>"
-	required/>
+	required style="margin:3px 0px;"/>
 <br />
 电邮地址:
 <input type="email" id="email" name="email_address" 
@@ -14,29 +14,29 @@
 	placeholder='邮箱' 
 	title ='字母数字下划线开头'
 	value="<%= account.email_address || "" %>" 
-	required/>
+	required style="margin:3px 0px;"/>
 <br />
 <label for="timezone">时区</label>
-<input type="text" value="<%= account.timezone || "" %>" name="timezone">
+<input type="text" value="<%= account.timezone || "" %>" name="timezone" style="margin:3px 0px;">
 <br />
 <label for="pref_language">通信语言</label>
-<input type="text" value="<%= account.pref_language || "" %>" name="pref_language">
+<input type="text" value="<%= account.pref_language || "" %>" name="pref_language" style="margin:3px 0px;">
 <br />
 
 <%var field=''
 for(var optional in optionals){
-field+='---------'+optional+'---------<br/>'
+field+='<br/>---------'+optional+'---------<br/>'
 for(var option in optionals[optional]){
 field+=option+' : <input value="'+(account[optionals[optional][option]['name']]||'')+'"'
 for(var opt in optionals[optional][option]){
 	field+=' '+opt+'='+optionals[optional][option][opt]
 }
-field+=' /><br>'
+field+=' style="margin:3px 0px;"/><br>'
 
 }}%>
 <%-field%>
 
 <br />
-<input type="submit" onclick='checkForm(this,"account")' value="更新设置"/>
+<input type="submit" onclick='checkForm2(this,"account")' value="加密更新"/>
 </form>
 <%- include pub/footer %>

@@ -1,5 +1,5 @@
 global.locals=require('./config/lan')
-var sessionStore=new(require('connect-mongo')(require('express-session')))({url:'mongodb'+require('./config/dburl')}),
+var sessionStore=new(require('connect-mongo')(require('express-session')))({url:'mongodb://localhost/incloudb'}), //'mongodb'+require('./config/dburl')
 	secret=require('./config').session.secret,
 	app = require('express')()//require-引入功能模块(即框架：jquery、Spring)
 	.set('env',require('./config').server.env)//设置当前环境为生产环境，避免在浏览器输出异常，默认为development
@@ -24,11 +24,13 @@ var sessionStore=new(require('connect-mongo')(require('express-session')))({url:
 	.use(require('./util/errs')._404)
 	.use(require('./util/errs').err),
 	server=require('https').createServer({key: require("fs").readFileSync('./key/privatekey.pem'),cert: require("fs").readFileSync('./key/certificate.pem')}, app)
-	.listen(require('./config').server.port||80,require('./config').server.listenIp||'localhost',function(){console.error(app.get('env'),server._connectionKey,'pid:', process.pid)}),//建立https服务
-	io=require('socket.io').listen(server)//SocketIO实时通讯框架
+	.listen(require('./config').server.port||80,function(){console.error(app.get('env'),server._connectionKey,'pid:', process.pid)})//建立https服务
+//	,ios=require('socket.io').listen(server)//SocketIO实时通讯框架
 	
 	//以下为自主开发的Session功能
-io.set('authorization', function(data, callback){
+	/*
+	//<1
+ios.set('authorization', function(data, callback){
 	sessionStore.get(secret, function(error, session){
 		if(error)return callback(error.message, false)
 		if(!session)return callback('nosession')
@@ -36,4 +38,15 @@ io.set('authorization', function(data, callback){
 		callback(null, true)
 	})
 })
-require('./routes/io')(io)
+//>1
+ios.use(function(data, callback){
+		console.log('data.session',data)
+	sessionStore.get(secret, function(error, session){
+		if(error)return callback(error.message, false)
+		if(!session)return callback('nosession')
+		data.session=session
+		console.log('data.session',data.session)
+		callback(null, true)
+	})
+})*/
+//require('./routes/io')(ios)

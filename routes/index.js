@@ -2,11 +2,32 @@ var express = require('express')
 	,rout= express.Router()
 	,machine=require('./machine')
 	,account = require('./account')
+rout.post('/code',function(req, res){
+	var sms=require('../util/sms'),
+	code=parseInt((Math.random()*9+1)*100000)
+	sms(req.body.phone,'赢在云端验证码：'+code,function(){
+	locals[req.body.phone]=code
+		res.send('验证码发送成功！')
+	})
+})
+rout.get('/ccap',function(req, res) {
+var ccap = require('ccap')(),
+	ary = ccap.get(),
+	txt = ary[0],
+	buf = ary[1];
+	req.session.ccap=txt
+    console.log(req.session.ccap);
+    res.send(buf);
+})
+rout.get('/404',function(req, res) {res.render('404');})
+rout.route('/captcha')
+	.get(function(req, res){req.session.captcha=parseInt((Math.random()*4));res.end(req.session.captcha+'')})
+	.post(function(req, res){res.end((req.body.captcha==req.session.captcha)+'')})
 rout.get('/home',function(req,res){res.render('home')})
 	.get('/chat',function(req,res){res.render('chat')})
 	.post('/signup',account.signupIO)
 	.route('/login')
-	.get(function(req, res) {req.session.account?res.redirect('/account'):res.render('login')})
+	.get(account.login)
 	.post(account.loginIO)
 rout.post('/reset',account.resetIO)
 	.route('/password_reset/:uuid/:code')
@@ -50,9 +71,11 @@ rout.get('/sshkeys/:id/del',account.deleteKey)
 		,machine.packages
 		,machine.create
 	)
+rout.route('/purchase/goshop')
+	.get(machine.getgoshop)
+	.post(machine.goshop)
 rout.route('/purchase/:type')
 	.get(machine.type)
-	.post(machine.goshop)
 rout.get('/machines'
 		,machine.dcs
 		,machine.machines
@@ -73,4 +96,6 @@ rout.get('/:dc/:id/reboot',machine.reboot)
 	.get('/:dc/:id/del',machine.del)
 	.get('/:dc/:id/refresh',machine.refresh)
 	.get('/:dc/:id/snapshot',machine.snapshot)
+rout.get('/clear/:type',machine.clear)
+
 module.exports = rout;
